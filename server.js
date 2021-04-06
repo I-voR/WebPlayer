@@ -4,8 +4,8 @@ const http = require('http')
 // const qs = require('querystring')
 
 const PORT = process.env.PORT || 3000
-const PATH = process.cwd() + '/'
-
+const PATH = process.cwd()
+const SERV_ADDR = 'http://localhost:' + PORT
 
 function readMusic() {
     let obj = {
@@ -13,11 +13,11 @@ function readMusic() {
         'files': []
     }
 
-    let dirs = fs.readdirSync(PATH + 'static/mp3/')
+    let dirs = fs.readdirSync(PATH + '/static/mp3/')
 
     dirs.forEach((dir) => {
         obj.dirs.push(dir)
-        let files = fs.readdirSync(PATH + 'static/mp3/' + dir)
+        let files = fs.readdirSync(PATH + '/static/mp3/' + dir)
         let album = []
 
         files.forEach((file) => {
@@ -33,15 +33,15 @@ function readMusic() {
 
 
 function redirect(req, res) {
-    let obj, site
+    let list
 
     switch (req.method) {
     case 'GET':
-        site = fs.readFileSync(PATH + 'index.html', 'utf-8')
-        obj = readMusic()
+        list = readMusic()
+        console.log(list)
 
         if (req.url.indexOf('.mp3') !== -1) {
-            fs.readFile(PATH + 'static/mp3/' + decodeURI(req.url), function(err, data) {
+            fs.readFile(PATH + '/static/mp3/' + decodeURI(req.url), function(err, data) {
                 if (err) {
                     return console.error(err)
                 }
@@ -50,7 +50,8 @@ function redirect(req, res) {
                 res.end()
             })
         } else {
-            res.write(site)
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
+            res.write(JSON.stringify(list, null, 2), 'utf-8')
             res.end()
         }
 
@@ -77,11 +78,40 @@ function redirect(req, res) {
 }
 
 const server = http.createServer(function(req, res) {
-    // res.writeHead(200, { 'content-type': 'application/json;charset=utf-8' } )
+    // res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' } )
     redirect(req, res)
 })
 
+const vue = http.createServer(function(req, res) {
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
+    let site
 
-server.listen(3000, function() {
+    switch (req.method) {
+    case 'GET':
+        site = fs.readFileSync(PATH + '/index.html', 'utf-8')
+        
+        if (req.url.indexOf('.mp3') !== -1) {
+            let audio = '<source src="' + SERV_ADDR + req.url + '"'
+            site = site.replace('<source', audio)
+            res.write(site, 'utf-8')
+            res.end()
+        } else {
+            res.write(site, 'utf-8')
+            res.end()
+        }
+    
+        // else {
+        // res.end(JSON.stringify(obj, null, 2))
+        // }
+    
+        break
+    }
+})
+
+server.listen(PORT, function() {
     console.log('Server started on port:', PORT)
+})
+
+vue.listen(8080, function() {
+    console.log('Server started on port:', 8080)
 })
