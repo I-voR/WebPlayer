@@ -1,3 +1,6 @@
+# ESLint
+.eslintrc.*
+
 # Logs
 logs
 *.log

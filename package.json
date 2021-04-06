@@ -1,0 +1,19 @@
+{
+  "name": "webplayer",
+  "version": "1.0.0",
+  "description": "WebPlayer do Stefańczyka",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/I-voR/WebPlayer.git"
+  },
+  "author": "I-voR",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/I-voR/WebPlayer/issues"
+  },
+  "homepage": "https://github.com/I-voR/WebPlayer#readme"
+}
