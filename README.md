@@ -1,2 +1,2 @@
 # WebPlayer
-Web player na Aplikacje Serwerowe (Vue Klient + Kotlin Serwer)
+Web player na Aplikacje Serwerowe (Vue Klient + Node Serwer)
