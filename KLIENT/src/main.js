@@ -32,7 +32,7 @@ let playBt = new Vue({
 
             document.getElementById('audio').play()
 
-            while (true) {
+            while (playBt.playing) {
                 await new Promise( r => window.setTimeout(r, 10) )
                 document.getElementById('input').value = parseInt(document.getElementById('audio').currentTime)
             }
