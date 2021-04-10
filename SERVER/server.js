@@ -61,6 +61,13 @@ function redirect(req, res) {
                 res.write(data)
                 res.end()
             })
+        } else if (req.url.indexOf('.jpg') !== -1) {
+            fs.readFile(PATH + '/static/mp3/' + decodeURI(req.url), function(err, data) {
+                if (err) { return }
+                res.writeHead(200, { 'Content-type': 'image/jpeg' })
+                res.write(data)
+                res.end()
+            })
         } else {
             res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
             res.write(JSON.stringify(list, null, 2), 'utf-8')
