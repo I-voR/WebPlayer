@@ -21,7 +21,7 @@ function readMusic() {
         let album = []
 
         files.forEach((file) => {
-            if (file !== 'cover.jpg') {
+            if (file.indexOf('.jpg') !== -1) {
                 album.push( { 'file': file } )
             }
         })
@@ -58,6 +58,13 @@ function redirect(req, res) {
             fs.readFile(PATH + '/static/svg/' + decodeURI(req.url), function(err, data) {
                 if (err) { return }
                 res.writeHead(200, { 'Content-type': 'image/svg+xml' })
+                res.write(data)
+                res.end()
+            })
+        } else if (req.url.indexOf('.jpg') !== -1) {
+            fs.readFile(PATH + '/static/mp3/' + decodeURI(req.url), function(err, data) {
+                if (err) { return }
+                res.writeHead(200, { 'Content-type': 'image/jpeg' })
                 res.write(data)
                 res.end()
             })
