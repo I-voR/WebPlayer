@@ -4,7 +4,6 @@ import App from './App.vue'
 Vue.config.productionTip = false
 
 new Vue({
-  el: '#play',
   data: {
     playing: false,
   },
@@ -30,9 +29,7 @@ new Vue({
 })
 
 new Vue({
-  el: '#prev',
-  data: {
-  },
+  data: { },
   methods: {
     prevSong: function (event) {
       console.log('prevSong')
@@ -41,9 +38,7 @@ new Vue({
 })
 
 new Vue({
-  el: '#next',
-  data: {
-  },
+  data: { },
   methods: {
     nextSong: function (event) {
       console.log('nextSong')
