@@ -5,7 +5,7 @@ const http = require('http')
 
 const PORT = process.env.PORT || 3000
 const PATH = process.cwd()
-const SERV_ADDR = 'http://localhost:' + PORT
+// const SERV_ADDR = 'http://localhost:' + PORT
 
 function readMusic() {
     let obj = {
@@ -37,41 +37,59 @@ function redirect(req, res) {
 
     switch (req.method) {
     case 'GET':
-        list = readMusic()
-        console.log(list)
-
-        if (req.url.indexOf('.mp3') !== -1) {
+        res.setHeader('Access-Control-Allow-Origin', '*')
+        
+        switch (req.url.substr(req.url.lastIndexOf('.') + 1)) {
+        case 'mp3':
             fs.readFile(PATH + '/static/mp3/' + decodeURI(req.url), function(err, data) {
                 if (err) { return }
                 res.writeHead(200, { 'Content-type': 'audio/mpeg' })
                 res.write(data)
                 res.end()
             })
-        } else if (req.url.indexOf('.css') !== -1) {
+            break
+        
+        case 'css':
             fs.readFile(PATH + '/static/css/' + decodeURI(req.url), function(err, data) {
                 if (err) { return }
                 res.writeHead(200, { 'Content-type': 'text/css' })
                 res.write(data)
                 res.end()
             })
-        } else if (req.url.indexOf('.svg') !== -1) {
+            break
+        
+        case 'svg':
             fs.readFile(PATH + '/static/svg/' + decodeURI(req.url), function(err, data) {
                 if (err) { return }
                 res.writeHead(200, { 'Content-type': 'image/svg+xml' })
                 res.write(data)
                 res.end()
             })
-        } else if (req.url.indexOf('.jpg') !== -1) {
+            break
+        
+        case 'jpg':
             fs.readFile(PATH + '/static/mp3/' + decodeURI(req.url), function(err, data) {
                 if (err) { return }
                 res.writeHead(200, { 'Content-type': 'image/jpeg' })
                 res.write(data)
                 res.end()
             })
-        } else {
+            break
+        
+        case 'js':
+            fs.readFile(PATH + '/../KLIENT/src/' + decodeURI(req.url), function(err, data) {
+                if (err) { return }
+                res.writeHead(200, { 'Content-type': 'text/javascript' })
+                res.write(data)
+                res.end()
+            })
+            break
+        
+        default:
             res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
             res.write(JSON.stringify(list, null, 2), 'utf-8')
             res.end()
+            break
         }
 
         // else {
@@ -81,8 +99,11 @@ function redirect(req, res) {
         break
 
     case 'POST':
+        list = readMusic()
+        console.log(list)
+
         res.setHeader('Access-Control-Allow-Origin', '*')
-        res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+        res.setHeader('Content-Type', 'application/json; charset=utf-8')
         res.end()
         break
 
@@ -109,7 +130,7 @@ const vue = http.createServer(function(req, res) {
     case 'GET':
         site = fs.readFileSync(PATH + '/../KLIENT/index.html', 'utf-8')
         
-        if (req.url.indexOf('.mp3') !== -1) {
+        /*if (req.url.indexOf('.mp3') !== -1) {
             let audio = '<source src="' + SERV_ADDR + req.url + '"'
             site = site.replace('<source', audio)
             res.write(site, 'utf-8')
@@ -117,12 +138,11 @@ const vue = http.createServer(function(req, res) {
         } else {
             res.write(site, 'utf-8')
             res.end()
-        }
-    
-        // else {
-        // res.end(JSON.stringify(obj, null, 2))
-        // }
-    
+        }*/
+
+        res.write(site, 'utf-8')
+        res.end()
+
         break
     }
 })

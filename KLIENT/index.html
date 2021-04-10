@@ -11,7 +11,7 @@
     <script src="https://unpkg.com/vue"></script>
 
     <link rel="stylesheet" href="http://localhost:3000/main.css" type="text/css"/>
-    <script defer type="module" src="./src/main.js" type="text/javascript"></script>
+    <script defer type="module" src="http://localhost:3000/main.js" type="text/javascript"></script>
 </head>
 
 <body>
@@ -38,70 +38,12 @@
         </button>
     </div>
 
-    <audio id="audio">
-        <source src="http://localhost:3000/Pawe%C5%82%20Kosza%C5%82ka/Wr%C3%B3%C4%87.mp3" id="audio_src"
-            type="audio/mp3" />
+    <audio id="audio" onchange="document.getElementById('input').value = parseInt(document.getElementById('audio').currentTime)">
+        <source id="audio_src" type="audio/mp3" />
     </audio>
 
-    <script>
+    <input id="input" value="0" step="1" type="range" onchange="document.getElementById('audio').currentTime = document.getElementById('input').value">
 
-
-        var app = new Vue({
-            el: '#app',
-            data: {
-                title: "Song title: "
-
-            }
-        })
-        app.title += " title"
-
-        var playBt = new Vue({
-            el: '#play',
-            data: {
-                playing: false,
-            },
-            methods: {
-                play: function (event) {
-                    playBt.playing = !playBt.playing
-                    console.log('playing')
-
-                    document.getElementById("audio").play()
-
-                },
-                pause: function (event) {
-                    playBt.playing = !playBt.playing
-                    console.log('paused')
-
-                    document.getElementById("audio").pause()
-
-                }
-            }
-        })
-
-        var prevBt = new Vue({
-            el: '#prev',
-            data: {
-            },
-            methods: {
-                prevSong: function (event) {
-                    console.log('prevSong')
-                }
-            }
-        })
-        var nextBt = new Vue({
-            el: '#next',
-            data: {
-            },
-            methods: {
-                nextSong: function (event) {
-                    console.log('nextSong')
-                }
-            }
-        })
-
-
-
-    </script>
 </body>
 
 </html>
