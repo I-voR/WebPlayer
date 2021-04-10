@@ -42,10 +42,22 @@ function redirect(req, res) {
 
         if (req.url.indexOf('.mp3') !== -1) {
             fs.readFile(PATH + '/static/mp3/' + decodeURI(req.url), function(err, data) {
-                if (err) {
-                    return console.error(err)
-                }
+                if (err) { return }
                 res.writeHead(200, { 'Content-type': 'audio/mpeg' })
+                res.write(data)
+                res.end()
+            })
+        } else if (req.url.indexOf('.css') !== -1) {
+            fs.readFile(PATH + '/static/css/' + decodeURI(req.url), function(err, data) {
+                if (err) { return }
+                res.writeHead(200, { 'Content-type': 'text/css' })
+                res.write(data)
+                res.end()
+            })
+        } else if (req.url.indexOf('.svg') !== -1) {
+            fs.readFile(PATH + '/static/svg/' + decodeURI(req.url), function(err, data) {
+                if (err) { return }
+                res.writeHead(200, { 'Content-type': 'image/svg+xml' })
                 res.write(data)
                 res.end()
             })
@@ -88,7 +100,7 @@ const vue = http.createServer(function(req, res) {
 
     switch (req.method) {
     case 'GET':
-        site = fs.readFileSync(PATH + '/index.html', 'utf-8')
+        site = fs.readFileSync(PATH + '/../KLIENT/index.html', 'utf-8')
         
         if (req.url.indexOf('.mp3') !== -1) {
             let audio = '<source src="' + SERV_ADDR + req.url + '"'

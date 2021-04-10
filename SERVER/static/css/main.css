@@ -1,0 +1,13 @@
+audio {
+    display: none;
+}
+
+button {
+    padding: 4px;
+    float: left;
+}
+
+.controls {
+    height: 50px;
+    width: 50px;
+}
