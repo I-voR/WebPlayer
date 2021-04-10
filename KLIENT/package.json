@@ -1,8 +1,12 @@
 {
   "name": "webplayer",
   "version": "1.0.0",
-  "description": "WebPlayer do Stefańczyka - SERWER",
-  "main": "server.js",
+  "description": "WebPlayer do Stefańczyka - KLIENT",
+  "main": "main.js",
+  "dependencies": {
+    "@vue/cli": "^4.5.12"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,8 +19,5 @@
   "bugs": {
     "url": "https://github.com/I-voR/WebPlayer/issues"
   },
-  "homepage": "https://github.com/I-voR/WebPlayer#readme",
-  "dependencies": {
-    "nedb": "^1.8.0"
-  }
+  "homepage": "https://github.com/I-voR/WebPlayer#readme"
 }
