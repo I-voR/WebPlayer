@@ -31,7 +31,6 @@ function readMusic() {
     return obj
 }
 
-
 function redirect(req, res) {
     let list
 
@@ -122,35 +121,6 @@ const server = http.createServer(function(req, res) {
     redirect(req, res)
 })
 
-const vue = http.createServer(function(req, res) {
-    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
-    let site
-
-    switch (req.method) {
-    case 'GET':
-        site = fs.readFileSync(PATH + '/../KLIENT/index.html', 'utf-8')
-        
-        /*if (req.url.indexOf('.mp3') !== -1) {
-            let audio = '<source src="' + SERV_ADDR + req.url + '"'
-            site = site.replace('<source', audio)
-            res.write(site, 'utf-8')
-            res.end()
-        } else {
-            res.write(site, 'utf-8')
-            res.end()
-        }*/
-
-        res.write(site, 'utf-8')
-        res.end()
-
-        break
-    }
-})
-
 server.listen(PORT, function() {
     console.log('Server started on port:', PORT)
-})
-
-vue.listen(8080, function() {
-    console.log('Server started on port:', 8080)
 })

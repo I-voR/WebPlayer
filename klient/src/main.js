@@ -3,26 +3,7 @@ import App from './App.vue'
 
 Vue.config.productionTip = false
 
-function load() {
-  document.getElementById('audio').src = 'http://localhost:3000/Pawe%C5%82%20Kosza%C5%82ka/Wr%C3%B3%C4%87.mp3'
-  document.getElementById('audio').load()
-
-  document.getElementById('audio').onloadedmetadata = () => {
-    document.getElementById('input').max = document.getElementById('audio').duration
-  }
-}
-
-let app = new Vue({
-  el: '#app',
-  data: {
-    title: 'Song title: '
-
-  }
-})
-
-app.title += ' title'
-
-let playBt = new Vue({
+new Vue({
   el: '#play',
   data: {
     playing: false,
@@ -48,7 +29,7 @@ let playBt = new Vue({
   }
 })
 
-let prevBt = new Vue({
+new Vue({
   el: '#prev',
   data: {
   },
@@ -59,7 +40,7 @@ let prevBt = new Vue({
   }
 })
 
-let nextBt = new Vue({
+new Vue({
   el: '#next',
   data: {
   },
@@ -70,4 +51,6 @@ let nextBt = new Vue({
   }
 })
 
-load()
+new Vue({
+  render: h => h(App)
+}).$mount('#app')
