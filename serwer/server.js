@@ -40,9 +40,16 @@ function redirect(req, res) {
         
         switch (req.url.substr(req.url.lastIndexOf('.') + 1)) {
         case 'mp3':
+        // case 'jpg':
             fs.readFile(PATH + '/static/mp3/' + decodeURI(req.url), function(err, data) {
                 if (err) { return }
-                res.writeHead(200, { 'Content-type': 'audio/mpeg' })
+                let stats = fs.statSync(PATH + '/static/mp3/' + decodeURI(req.url))
+                res.writeHead(200, {
+                    'Content-type': 'audio/mpeg',
+                    /* 'Content-type': `${req.url.substr(req.url.lastIndexOf('.') + 1) === 'mp3' ? 'audio/mpeg' : 'image/jpeg'}`,*/
+                    'Content-Length': stats.size,
+                    'Accept-Ranges': 'bytes' 
+                })
                 res.write(data)
                 res.end()
             })
@@ -52,15 +59,6 @@ function redirect(req, res) {
             fs.readFile(PATH + '/static/svg/' + decodeURI(req.url), function(err, data) {
                 if (err) { return }
                 res.writeHead(200, { 'Content-type': 'image/svg+xml' })
-                res.write(data)
-                res.end()
-            })
-            break
-        
-        case 'jpg':
-            fs.readFile(PATH + '/static/mp3/' + decodeURI(req.url), function(err, data) {
-                if (err) { return }
-                res.writeHead(200, { 'Content-type': 'image/jpeg' })
                 res.write(data)
                 res.end()
             })
@@ -77,7 +75,7 @@ function redirect(req, res) {
         break
 
     case 'POST':
-        console.log(req)
+        console.log(res.json)
         list = readMusic()
         console.log(list)
 

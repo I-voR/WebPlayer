@@ -4,3 +4,13 @@ document.getElementById('audio').load()
 document.getElementById('audio').onloadedmetadata = () => {
     document.getElementById('inputProgress').max = document.getElementById('audio').duration
 }
+
+document.getElementById('audio').ontimeupdate = function() {
+    document.getElementById('inputProgress').value = parseInt(document.getElementById('audio').currentTime)
+}
+
+document.getElementById('audio').onended = function() {
+    document.getElementById('inputProgress').value = 0
+    this.playing = false
+    console.log('stopped, playing next')
+}

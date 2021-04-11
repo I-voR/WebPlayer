@@ -60,18 +60,6 @@ export default {
       console.log('playing')
 
       document.getElementById('audio').play()
-
-      while (this.playing) {
-        await new Promise((r) => window.setTimeout(r, 10))
-        document.getElementById('inputProgress').value = parseInt(
-          document.getElementById('audio').currentTime)
-
-          if (document.getElementById('audio').currentTime === document.getElementById('audio').duration) {
-            document.getElementById('inputProgress').value = 0
-            this.playing = false
-            console.log('stopped')
-          }
-      }
     },
     pause: function() {
       this.playing = false
@@ -83,12 +71,14 @@ export default {
     nextSong: function() { console.log('nextSong') },
     prevSong: function() { console.log('prevSong') },
     changeProgress: function() {
+      document.getElementById('audio').pause()
       document.getElementById('audio').currentTime = document.getElementById('inputProgress').value
+      document.getElementById('audio').play()
     },
     pauseProgress: function() {
       if (!this.playingDuringCLick) {
-        this.playing = false
         document.getElementById('audio').pause()
+        this.playing = false
       }
     },
     playProgress: function() {
