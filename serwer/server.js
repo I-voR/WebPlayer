@@ -67,9 +67,6 @@ function redirect(req, res) {
             break
         
         default:
-            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
-            res.write(JSON.stringify(list, null, 2), 'utf-8')
-            res.end()
             break
         }
 
@@ -80,11 +77,14 @@ function redirect(req, res) {
         break
 
     case 'POST':
+        console.log(req)
         list = readMusic()
         console.log(list)
 
         res.setHeader('Access-Control-Allow-Origin', '*')
         res.setHeader('Content-Type', 'application/json; charset=utf-8')
+        res.write(JSON.stringify(list, null, 2), 'utf-8')
+
         res.end()
         break
 

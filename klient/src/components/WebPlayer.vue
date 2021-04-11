@@ -35,11 +35,13 @@
 
     <div id="input-container">
       <div id="progress">
-        <input id="inputProgress" class="slider" value="0" step="1" type="range" @change="changeProgress" @mousedown="pause" @mouseup="play">
+        <input id="inputProgress" class="slider" value="0" step="1" type="range"
+          @change="changeProgress" @mousedown="pauseProgress" @mouseup="playProgress">
       </div>
 
       <div id="volume">
-        <input id="inputVolume" class="slider" value="1" step="0.01" min="0" max="1" type="range" @mousemove="changeVolume">
+        <input id="inputVolume" class="slider" value="1" step="0.01" min="0" max="1" type="range"
+          @mousemove="changeVolume">
       </div>
     </div>
 
@@ -50,10 +52,11 @@
 export default {
   name: 'WebPlayer',
   props: { msg: String },
-  data() { return { playing: false, } },
+  data() { return { playing: false, playingDuringCLick: false } },
   methods: {
-    play: async function (event) {
-      this.playing = !this.playing;
+    play: async function() {
+      this.playing = true
+      this.playingDuringCLick = true
       console.log('playing')
 
       document.getElementById('audio').play()
@@ -65,13 +68,14 @@ export default {
 
           if (document.getElementById('audio').currentTime === document.getElementById('audio').duration) {
             document.getElementById('inputProgress').value = 0
-            this.playing = !this.playing
+            this.playing = false
             console.log('stopped')
           }
       }
     },
     pause: function() {
-      this.playing = !this.playing
+      this.playing = false
+      this.playingDuringCLick = false
       console.log('paused')
 
       document.getElementById('audio').pause()
@@ -80,6 +84,18 @@ export default {
     prevSong: function() { console.log('prevSong') },
     changeProgress: function() {
       document.getElementById('audio').currentTime = document.getElementById('inputProgress').value
+    },
+    pauseProgress: function() {
+      if (!this.playingDuringCLick) {
+        this.playing = false
+        document.getElementById('audio').pause()
+      }
+    },
+    playProgress: function() {
+      if (this.playingDuringCLick) {
+        this.playing = true
+        document.getElementById('audio').play()
+      }
     },
     changeVolume: function() {
       document.getElementById('audio').volume = document.getElementById('inputVolume').value
