@@ -43,7 +43,7 @@ export default {
   methods: {
     play: async function (event) {
       this.playing = !this.playing;
-      console.log("playing");
+      console.log("playing")
 
       document.getElementById("audio").play()
 
@@ -59,18 +59,21 @@ export default {
           }
       }
     },
-    pause: function (event) {
-      this.playing = !this.playing;
-      console.log("paused");
+    pause: function(event) {
+      this.playing = !this.playing
+      console.log("paused")
 
       document.getElementById("audio").pause()
     },
-    nextSong: function (event) {
-      console.log("nextSong");
+    nextSong: function(event) {
+      console.log("nextSong")
     },
-    prevSong: function (event) {
-      console.log("prevSong");
+    prevSong: function(event) {
+      console.log("prevSong")
     },
+    changeInput: function() {
+      document.getElementById('audio').currentTime = document.getElementById('input').value
+    }
   },
 }
 
