@@ -2,5 +2,5 @@ document.getElementById('audio').src = 'http://localhost:3000/Pawe%C5%82%20Kosza
 document.getElementById('audio').load()
 
 document.getElementById('audio').onloadedmetadata = () => {
-    document.getElementById('input').max = document.getElementById('audio').duration
+    document.getElementById('inputProgress').max = document.getElementById('audio').duration
 }
