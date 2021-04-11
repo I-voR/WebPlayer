@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/I-voR/WebPlayer#readme",
   "dependencies": {
+    "axios": "^0.21.1",
     "nedb": "^1.8.0"
   }
 }

@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <WebPlayer msg="<piosenka>"/>
+    <WebPlayer msg="<piosenka>" />
   </div>
 </template>
 
 <script>
-import WebPlayer from './components/WebPlayer.vue'
+import WebPlayer from "./components/WebPlayer.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    WebPlayer
-  }
-}
+    WebPlayer,
+  },
+};
 </script>
