@@ -3,5 +3,4 @@ document.getElementById('audio').load()
 
 document.getElementById('audio').onloadedmetadata = () => {
     document.getElementById('input').max = document.getElementById('audio').duration
-
 }
