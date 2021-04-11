@@ -48,15 +48,6 @@ function redirect(req, res) {
             })
             break
         
-        case 'css':
-            fs.readFile(PATH + '/static/css/' + decodeURI(req.url), function(err, data) {
-                if (err) { return }
-                res.writeHead(200, { 'Content-type': 'text/css' })
-                res.write(data)
-                res.end()
-            })
-            break
-        
         case 'svg':
             fs.readFile(PATH + '/static/svg/' + decodeURI(req.url), function(err, data) {
                 if (err) { return }
@@ -70,15 +61,6 @@ function redirect(req, res) {
             fs.readFile(PATH + '/static/mp3/' + decodeURI(req.url), function(err, data) {
                 if (err) { return }
                 res.writeHead(200, { 'Content-type': 'image/jpeg' })
-                res.write(data)
-                res.end()
-            })
-            break
-        
-        case 'js':
-            fs.readFile(PATH + '/../KLIENT/src/' + decodeURI(req.url), function(err, data) {
-                if (err) { return }
-                res.writeHead(200, { 'Content-type': 'text/javascript' })
                 res.write(data)
                 res.end()
             })
