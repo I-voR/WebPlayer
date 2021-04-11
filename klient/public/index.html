@@ -17,31 +17,10 @@
 </head>
 
 <body>
-
   <div id="app"></div>
   <!-- built files will be auto injected -->
 
   <audio id="audio"></audio>
-
-  <br><br><br><br>
-  <div id="input-container">
-    <input id="input" class="slider" value="0" step="1" type="range" onchange="change(this.value, this.max)"
-      onchange="document.getElementById('audio').currentTime = document.getElementById('input').value">
-  </div>
-
-
-  <script>
-
-    function change(input, max) {
-      max = Math.floor(max)
-      console.log(input + ' ' + max)
-
-      if (max == input) {
-        $refs.c.play()
-      }
-    }
-
-  </script>
 </body>
 
 </html>
