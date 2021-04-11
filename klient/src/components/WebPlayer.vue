@@ -1,7 +1,7 @@
 <template>
-    <div id="main">
-      <h1>Tytuł piosenki: {{ msg }}</h1>
-
+  <div id="main">
+    <h1>Tytuł piosenki: {{ msg }}</h1>
+    <div id="button-container">
       <div id="prev">
         <button @click="prevSong">
           <img class="controls" src="http://localhost:3000/prevSong.svg" />
@@ -18,52 +18,56 @@
       </div>
       <div id="next">
         <button @click="nextSong">
-          <img class="controls" style="transform: rotate(180deg);" src="http://localhost:3000/prevSong.svg" />
+          <img
+            class="controls"
+            style="transform: rotate(180deg)"
+            src="http://localhost:3000/prevSong.svg"
+          />
         </button>
       </div>
-    
     </div>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'WebPlayer',
+  name: "WebPlayer",
   props: {
-    msg: String
+    msg: String,
   },
   data() {
     return {
       playing: false,
-    }
+    };
   },
   methods: {
     play: async function (event) {
-      this.playing = !this.playing
-      console.log('playing')
+      this.playing = !this.playing;
+      console.log("playing");
 
-      document.getElementById('audio').play()
+      document.getElementById("audio").play();
 
       while (this.playing) {
-        await new Promise(r => window.setTimeout(r, 10))
-        document.getElementById('input').value = parseInt(document.getElementById('audio').currentTime)
+        await new Promise((r) => window.setTimeout(r, 10));
+        document.getElementById("input").value = parseInt(
+          document.getElementById("audio").currentTime
+        );
       }
     },
     pause: function (event) {
-      this.playing = !this.playing
-      console.log('paused')
+      this.playing = !this.playing;
+      console.log("paused");
 
-      document.getElementById('audio').pause()
+      document.getElementById("audio").pause();
     },
     nextSong: function (event) {
-      console.log('nextSong')
+      console.log("nextSong");
     },
     prevSong: function (event) {
-      console.log('prevSong')
-    }
-  }
-}
-
-
+      console.log("prevSong");
+    },
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
