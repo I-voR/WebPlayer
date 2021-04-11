@@ -41,9 +41,9 @@ export default {
   props: { msg: String, },
   data() { return { playing: false, } },
   methods: {
-    play: async function() {
-      this.playing = !this.playing
-      console.log("playing")
+    play: async function (event) {
+      this.playing = !this.playing;
+      console.log("playing");
 
       document.getElementById("audio").play()
 
@@ -59,17 +59,18 @@ export default {
           }
       }
     },
-    pause: function() {
-      this.playing = !this.playing
-      console.log("paused")
+    pause: function (event) {
+      this.playing = !this.playing;
+      console.log("paused");
 
       document.getElementById("audio").pause()
     },
-    nextSong: function() { console.log("nextSong") },
-    prevSong: function() { console.log("prevSong") },
-    changeInput: function() {
-      document.getElementById('audio').currentTime = document.getElementById('input').value
-    }
+    nextSong: function (event) {
+      console.log("nextSong");
+    },
+    prevSong: function (event) {
+      console.log("prevSong");
+    },
   },
 }
 
