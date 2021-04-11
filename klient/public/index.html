@@ -16,9 +16,7 @@
     <div id="app"></div>
     <!-- built files will be auto injected -->
 
-    <audio id="audio"
-      onchange="document.getElementById('input').value = parseInt(document.getElementById('audio').currentTime)">
-    </audio>
+    <audio id="audio"></audio>
 
     <input id="input" value="0" step="1" type="range"
       onchange="document.getElementById('audio').currentTime = document.getElementById('input').value">

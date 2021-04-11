@@ -3,24 +3,25 @@
       <h1>Tytuł piosenki: {{ msg }}</h1>
 
       <div id="prev">
-        <button v-on:click="prevSong">
+        <button @click="prevSong">
           <img class="controls" src="http://localhost:3000/prevSong.svg" />
         </button>
       </div>
       <div id="play">
-        <button v-if="!playing" v-on:click="play">
+        <button v-if="!playing" @click="play">
           <img class="controls" src="http://localhost:3000/play.svg" />
         </button>
 
-        <button v-if="playing" v-on:click="pause">
+        <button v-if="playing" @click="pause">
           <img class="controls" src="http://localhost:3000/pause.svg" />
         </button>
       </div>
       <div id="next">
-        <button v-on:click="nextSong">
+        <button @click="nextSong">
           <img class="controls" style="transform: rotate(180deg);" src="http://localhost:3000/prevSong.svg" />
         </button>
       </div>
+    
     </div>
 </template>
 
@@ -29,8 +30,40 @@ export default {
   name: 'WebPlayer',
   props: {
     msg: String
+  },
+  data() {
+    return {
+      playing: false,
+    }
+  },
+  methods: {
+    play: async function (event) {
+      this.playing = !this.playing
+      console.log('playing')
+
+      document.getElementById('audio').play()
+
+      while (this.playing) {
+        await new Promise(r => window.setTimeout(r, 10))
+        document.getElementById('input').value = parseInt(document.getElementById('audio').currentTime)
+      }
+    },
+    pause: function (event) {
+      this.playing = !this.playing
+      console.log('paused')
+
+      document.getElementById('audio').pause()
+    },
+    nextSong: function (event) {
+      console.log('nextSong')
+    },
+    prevSong: function (event) {
+      console.log('prevSong')
+    }
   }
 }
+
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
