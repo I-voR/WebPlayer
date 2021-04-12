@@ -1,0 +1,54 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+body * {
+    font-size: 72px;
+    font-family: cursive;
+    text-align: center;
+}
+
+#dragndrop {
+    width: 100%;
+    height: 128px;
+    background-color: darkslateblue;
+    line-height: 128px;
+    color: white;
+    border: none;
+}
+
+#upload {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    background-color: rgba(128, 128, 128, 0.5);
+    line-height: 100vh;
+}
+
+.file {
+    width: 100%;
+    height: 64px;
+    background-color: lightgray;
+    padding-top: 16px;
+}
+
+img {
+    display: block;
+    float: left;
+    width: 50px;
+    height: 50px;
+}
+
+span {
+    font-size: 32px;
+    display: block;
+    float: left;
+}
+
+form {
+    display: none;
+}
