@@ -2,11 +2,12 @@
 const fs = require('fs')
 const http = require('http')
 const Crypto = require('crypto')
-// const qs = require('querystring')
+const formidable = require('formidable')
 
 const PORT = process.env.PORT || 3000
 const PATH = process.cwd().replace(/\\/g, '/')
 
+// eslint-disable-next-line no-unused-vars
 function readMusic() {
     let obj = {
         'dirs': [],
@@ -31,8 +32,55 @@ function readMusic() {
     return obj
 }
 
+function fileUpload(fields, files) {
+    let oldPath, newPath
+    let dir = PATH + '/static/mp3/upload-'
+    dir += Crypto.randomBytes(16).toString('base64').slice(0, 16).replace(/\//g, '0').replace(/\\/g, '0') // Crypto-random string
+    dir += '/'
+    
+    if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir)
+    }
+
+    for (let i = 0; i < fields.length; i++) {
+        let name = 'file' + i
+        oldPath = files[name].path
+        newPath = dir + files[name].name
+
+        if (files[name].name.indexOf('jpg') !== -1) {
+            newPath = dir + 'cover.jpg'
+        }
+
+        fs.rename(oldPath, newPath, function(err) {
+            if (err) return
+        })
+    }
+}
+
+function formHandler(req, res) {
+    let form = formidable.IncomingForm()
+    
+    if (!fs.existsSync(PATH + '/static/mp3/temp/')){
+        fs.mkdirSync(PATH + '/static/mp3/temp/')
+    }
+
+    form.uploadDir = PATH + '/static/mp3/temp/'
+
+    form.parse(req, function(err, fields, files) {
+        if (err) {
+            return
+        }
+
+        if (fields.action === 'UPLOAD') fileUpload(fields, files)
+        else {
+            let list = readMusic()
+            res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+            res.end(JSON.stringify(list, null, 2))
+        }
+    })
+}
+
 function redirect(req, res) {
-    let list
     res.setHeader('Access-Control-Allow-Origin', '*')
 
     switch (req.method) {
@@ -116,28 +164,12 @@ function redirect(req, res) {
             break
 
         default:
-            console.log(req.url)
-
             if (req.url === '/admin' || req.url === '/admin.html') {
                 fs.readFile(PATH + '/admin.html', function(err, data) {
                     if (err) { return }
                     res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
                     res.write(data, 'utf-8')
                     res.end()
-
-                    let dir = PATH + '/' + 
-                        Crypto
-                            .randomBytes(16)
-                            .toString('base64')
-                            .slice(0, 16)
-                            .replace(/\//g, ' ')
-                            .replace(/\\/g, ' ') // Crypto random string
-
-                    console.log(dir) 
-
-                    // if (!fs.existsSync(dir)){
-                    //     fs.mkdirSync(dir)
-                    // }
                 })
             }
             break
@@ -146,14 +178,10 @@ function redirect(req, res) {
         break
 
     case 'POST':
-        console.log(req)
-        list = readMusic()
-        console.log(list)
-
-        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' } )
-        res.write(JSON.stringify(list, null, 2), 'utf-8')
-
+        formHandler(req)
+        res.writeHead(200)
         res.end()
+
         break
 
     case 'OPTIONS':
@@ -170,5 +198,6 @@ const server = http.createServer(function(req, res) {
 })
 
 server.listen(PORT, function() {
+    // eslint-disable-next-line no-console
     console.log('Server started on port:', PORT)
 })

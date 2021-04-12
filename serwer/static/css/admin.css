@@ -18,7 +18,6 @@ body * {
     background-color: darkslateblue;
     line-height: 128px;
     color: white;
-    border: none;
 }
 
 #upload {
@@ -47,8 +46,4 @@ span {
     font-size: 32px;
     display: block;
     float: left;
-}
-
-form {
-    display: none;
 }

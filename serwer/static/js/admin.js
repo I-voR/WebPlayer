@@ -1,12 +1,12 @@
-/* eslint-disable require-jsdoc */
-/* eslint-disable no-console */
-
+/** 
+* Add <DIV> elements which are representing files to upload
+* @param {Array} files - Array of all files which are going to be send.
+*/
 function generateList(files) {
     let div, img, span
 
     setTimeout(function() {
         for (let i = 0; i < files.length; i++) {
-            console.log(files[i])
             div = document.createElement('DIV')
             div.className = 'file'
             
@@ -24,8 +24,24 @@ function generateList(files) {
     }, 500)
 }
 
-function createForm() {
+/** 
+* Send a form to SERVER with files and additional data.
+* @param {Array} files - Array of all files which are going to be send.
+*/
+function sendForm(files) {
+    let formData = new FormData()
 
+    formData.append('action', 'UPLOAD')
+    formData.append('length', files.length)
+
+    for (let i = 0; i < files.length; i++) {
+        formData.append('file' + i, files[i], files[i].name)
+    }
+
+    let xhr = new XMLHttpRequest()
+    xhr.open('POST', 'http://localhost:3000', true)
+
+    xhr.send(formData)
 }
 
 document.querySelector('html').ondragover = function(e) {
@@ -63,10 +79,6 @@ document.querySelector('#dragndrop').ondrop = function(e) {
     document.querySelector('#dragndrop').innerText = 'Upload'
     document.querySelector('#dragndrop').style = 'cursor:pointer;'
 
-    document.querySelector('#dragndrop').onclick = function() {
-        console.log('upload')
-    }
-
     document.querySelector('#upload').style = 'display:block;'
 
     setTimeout(function() {
@@ -74,4 +86,5 @@ document.querySelector('#dragndrop').ondrop = function(e) {
     }, 500)
 
     generateList(e.dataTransfer.files)
+    sendForm(e.dataTransfer.files)
 }
