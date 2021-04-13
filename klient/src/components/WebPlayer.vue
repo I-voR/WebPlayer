@@ -122,17 +122,6 @@ export default {
     },
   },
 };
-
-function sendForm(action) {
-  //FIRST NEXT
-  let formData = new FormData();
-  formData.append("action", action);
-  let xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost:3000", true);
-
-  xhr.send(formData);
-}
-sendForm("FIRST");
 </script>
 
 

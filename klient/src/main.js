@@ -1,13 +1,31 @@
 import Vue from 'vue'
+import Vuex from 'vuex'
 import App from './App.vue'
 import axios from 'axios'
 
+
 Vue.config.productionTip = false
 
+Vue.use(Vuex);
+
+const store = new Vuex.Store({
+  state,
+  getters,
+  actions,
+  mutations
+})
+
 new Vue({
+  store: store,
   render: (h) => h(App)
 }).$mount('#app')
 
+function sendForm(action) {
+  //FIRST NEXT
+  let formData = new FormData();
+  formData.append("action", action);
+  return formData;
+}
 
 
 // state
@@ -25,7 +43,7 @@ const getters = {
 // actions
 const actions = {
   getPostsAction({ commit }) {
-    axios.post("http://localhost:3000/api", { action: "FIRST" }).then(response => {
+    axios.post("http://localhost:3000/api", sendForm("FIRST")).then(response => {
       commit('SET_POSTS', response.data)
     })
   }
@@ -37,6 +55,7 @@ const mutations = {
     state.posts = posts
   }
 }
+
 
 
 
