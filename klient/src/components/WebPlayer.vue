@@ -121,7 +121,16 @@ export default {
       ).value;
     },
   },
+
+
+
 };
+
+
+mounted(){
+    //akcja
+    this.$store.dispatch("getPostsAction");
+}
 </script>
 
 
