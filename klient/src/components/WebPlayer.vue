@@ -1,6 +1,6 @@
 <template>
   <div id="main">
-    <h1>Tytuł piosenki: {{ msg }}</h1>
+    <h1>Tytuł piosenki: {{ title }}</h1>
     <div id="albums">
       <div class="album" v-for="(dir, i) in listTracks.dirs" v-bind:key="i">
         <button @click="print(listTracks.files[i], listTracks.dirs[i])">
@@ -87,6 +87,7 @@ export default {
       playing: false,
       playingDuringCLick: false,
       songlist: { show: false, songs: [], album: "" },
+      title: "",
     };
   },
   mounted() {
@@ -96,6 +97,7 @@ export default {
   },
   methods: {
     setMusicUrl: function (songName) {
+      this.title = songName.slice(0, -4);
       this.playing = false;
       console.log(
         "http://localhost:3000/" + this.songlist.album + "/" + songName
