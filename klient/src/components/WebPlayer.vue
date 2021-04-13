@@ -1,13 +1,25 @@
 <template>
   <div id="main">
     <h1>Tytuł piosenki: {{ msg }}</h1>
-
-    <div class="track" v-for="(dir, i) in listTracks.dirs" v-bind:key="i">
-      <a @click="getfile(dir, i)">{{ dir }} </a>
-
-      <button @click="print(listTracks.files[i])"></button>
+    <div id="albums">
+      <div class="album" v-for="(dir, i) in listTracks.dirs" v-bind:key="i">
+        <button @click="print(listTracks.files[i], listTracks.dirs[i])">
+          <img
+            v-bind:src="'http://localhost:3000/' + listTracks.dirs[i] + '.jpg'"
+            style="width: 225px; height: 225px"
+          />
+        </button>
+      </div>
+    </div>
+    <div id="songs">
+      <div class="song" v-for="(dir, i) in songs()" v-bind:key="i">
+        <button class="songButton" @click="setMusicUrl(songs(i))">
+          {{ songs(i) }}
+        </button>
+      </div>
     </div>
 
+    <br />
     <div id="button-container">
       <div id="prev">
         <button @click="prevSong">
@@ -71,18 +83,47 @@ export default {
   name: "WebPlayer",
   props: { msg: String },
   data() {
-    return { playing: false, playingDuringCLick: false };
+    return {
+      playing: false,
+      playingDuringCLick: false,
+      songlist: { show: false, songs: [], album: "" },
+    };
   },
   mounted() {
     //akcja
     this.$store.dispatch("getPostsAction");
     console.log("comp mounted", new Date().getMilliseconds());
-    console.log(this.$store.getters.getAllPosts.dirs);
-    console.log(this.$store.getters.getAllPosts.files);
   },
   methods: {
-    print: function (printing) {
+    setMusicUrl: function (songName) {
+      this.playing = false;
+      console.log(
+        "http://localhost:3000/" + this.songlist.album + "/" + songName
+      );
+      document.getElementById("audio").src =
+        "http://localhost:3000/" + this.songlist.album + "/" + songName;
+      document.getElementById("audio").load();
+    },
+    print: function (printing, albumName) {
+      if (this.songlist.show && this.songlist.songs == printing) {
+        this.songlist.show = false;
+        this.songlist.songs = [];
+        this.songlist.album = "";
+      } else {
+        this.songlist.show = true;
+        this.songlist.songs = printing;
+        this.songlist.album = albumName;
+        console.log(this.songlist.show);
+        console.log(this.songlist.songs);
+      }
       console.log(printing);
+    },
+    songs: function (num) {
+      if (num == null || num == undefined) {
+        return this.songlist.songs;
+      } else {
+        return this.songlist.songs[num];
+      }
     },
     play: async function () {
       this.playing = true;

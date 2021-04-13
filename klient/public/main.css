@@ -80,3 +80,21 @@ h1 {
     background: #a344a0;
     cursor: pointer;
 }
+#albums{
+    border: 1px red solid;
+    height: 250px;
+    width: 100%;
+}
+#songs{
+    border: 1px red solid;
+    height: 250px;
+    width: 100%;
+}
+.song{
+    border: 1px red solid;
+
+}
+.songButton{
+    border: 1px red solid;
+    width: 20%;  
+}
