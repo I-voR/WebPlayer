@@ -73,7 +73,7 @@ export default {
       this.playingDuringCLick = true;
       console.log("playing");
 
-      document.getElementById('audio').play()
+      document.getElementById("audio").play();
     },
     pause: function () {
       this.playing = false;
@@ -82,12 +82,18 @@ export default {
 
       document.getElementById("audio").pause();
     },
-    nextSong: function() { console.log('nextSong') },
-    prevSong: function() { console.log('prevSong') },
-    changeProgress: function() {
-      document.getElementById('audio').pause()
-      document.getElementById('audio').currentTime = document.getElementById('inputProgress').value
-      document.getElementById('audio').play()
+    nextSong: function () {
+      console.log("nextSong");
+    },
+    prevSong: function () {
+      console.log("prevSong");
+    },
+    changeProgress: function () {
+      document.getElementById("audio").pause();
+      document.getElementById("audio").currentTime = document.getElementById(
+        "inputProgress"
+      ).value;
+      document.getElementById("audio").play();
     },
     prevSong: function () {
       console.log("prevSong");
@@ -99,8 +105,8 @@ export default {
     },
     pauseProgress: function () {
       if (!this.playingDuringCLick) {
-        document.getElementById('audio').pause()
-        this.playing = false
+        document.getElementById("audio").pause();
+        this.playing = false;
       }
     },
     playProgress: function () {
@@ -116,6 +122,17 @@ export default {
     },
   },
 };
+
+function sendForm(action) {
+  //FIRST NEXT
+  let formData = new FormData();
+  formData.append("action", action);
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", "http://localhost:3000", true);
+
+  xhr.send(formData);
+}
+sendForm("FIRST");
 </script>
 
 
