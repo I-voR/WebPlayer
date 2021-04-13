@@ -26,6 +26,8 @@ const actions = {
   getPostsAction({ commit }) {
     axios.post("http://localhost:3000/api", sendForm("FIRST")).then(response => {
       commit('SET_POSTS', response.data)
+      console.log(state.posts.dirs)
+      console.log(state.posts.files)
     })
   }
 }
@@ -36,8 +38,6 @@ const mutations = {
     state.posts = posts
   }
 }
-
-
 
 const store = new Vuex.Store({
   state,

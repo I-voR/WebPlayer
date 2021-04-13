@@ -70,8 +70,7 @@ export default {
   mounted() {
     //akcja
     this.$store.dispatch("getPostsAction");
-    console.log("comp mounted", new Date().getMilliseconds());
-    console.log(this.$store.getters.getAllPosts);
+    console.log("comp mounted", new Date().getMilliseconds())
   },
   methods: {
     play: async function () {
