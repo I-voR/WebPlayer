@@ -5,8 +5,8 @@
       <div class="album" v-for="(dir, i) in listTracks.dirs" v-bind:key="i">
         <button @click="print(listTracks.files[i], listTracks.dirs[i])">
           <img
+            class="cover"
             v-bind:src="'http://localhost:3000/' + listTracks.dirs[i] + '.jpg'"
-            style="width: 225px; height: 225px"
           />
         </button>
       </div>
@@ -46,9 +46,11 @@
           />
         </button>
       </div>
+
+      <div id="timer">{{ time }}</div>
     </div>
 
-    <div id="input-container">
+    <div id="progress-container">
       <div id="progress">
         <input
           id="inputProgress"
@@ -61,7 +63,8 @@
           @mouseup="playProgress"
         />
       </div>
-
+    </div>
+    <div id="input-container">
       <div id="volume">
         <input
           id="inputVolume"
@@ -88,6 +91,7 @@ export default {
       playingDuringCLick: false,
       songlist: { show: false, songs: [], album: "" },
       title: "",
+      time: "00:00",
     };
   },
   mounted() {
@@ -103,6 +107,7 @@ export default {
         this.songlist.songs != undefined &&
         this.songlist.songs != []
       ) {
+        this.time = "00:00";
         let counter = this.songlist.songs.indexOf(songBefore);
         var songName;
         switch (direction) {
@@ -140,8 +145,25 @@ export default {
             break;
         }
       }
+
+      this.playing = true;
+      this.playingDuringCLick = true;
+      console.log("playing");
+
+      document.getElementById("audio").play();
+
+      document
+        .getElementById("audio")
+        .addEventListener(
+          "timeupdate",
+          () =>
+            (this.time = timer(
+              document.getElementById("audio").currentTime.toFixed()
+            ))
+        );
     },
     setMusicUrl: function (songName) {
+      this.time = "00:00";
       this.title = songName.split(".")[0];
       this.playing = false;
       console.log(
@@ -173,11 +195,40 @@ export default {
       }
     },
     play: async function () {
+      function timer(input) {
+        let time = parseInt(input);
+        let minutes = Math.trunc(time / 60);
+        let seconds = time % 60;
+        seconds = seconds.toString();
+        minutes = minutes.toString();
+        console.log(seconds.length + " " + seconds);
+        if (minutes == undefined) {
+          minutes = 0;
+        }
+        if (minutes.length == 1) {
+          minutes = "0" + minutes;
+        }
+        if (seconds.length == 1) {
+          seconds = "0" + seconds;
+        }
+        return minutes + ":" + seconds;
+      }
+
       this.playing = true;
       this.playingDuringCLick = true;
       console.log("playing");
 
       document.getElementById("audio").play();
+
+      document
+        .getElementById("audio")
+        .addEventListener(
+          "timeupdate",
+          () =>
+            (this.time = timer(
+              document.getElementById("audio").currentTime.toFixed()
+            ))
+        );
     },
     pause: function () {
       this.playing = false;
@@ -192,9 +243,6 @@ export default {
         "inputProgress"
       ).value;
       document.getElementById("audio").play();
-    },
-    prevSong: function () {
-      console.log("prevSong");
     },
     changeProgress: function () {
       document.getElementById("audio").currentTime = document.getElementById(
