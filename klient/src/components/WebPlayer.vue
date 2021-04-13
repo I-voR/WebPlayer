@@ -67,6 +67,12 @@ export default {
   data() {
     return { playing: false, playingDuringCLick: false };
   },
+  mounted() {
+    //akcja
+    this.$store.dispatch("getPostsAction");
+    console.log("comp mounted", new Date().getMilliseconds());
+    console.log(this.$store.getters.getAllPosts);
+  },
   methods: {
     play: async function () {
       this.playing = true;
@@ -121,16 +127,7 @@ export default {
       ).value;
     },
   },
-
-
-
 };
-
-
-mounted(){
-    //akcja
-    this.$store.dispatch("getPostsAction");
-}
 </script>
 
 
