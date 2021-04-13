@@ -11,7 +11,11 @@ Vue.use(Vuex);
 
 // state
 const state = {
-  posts: []
+  posts: {
+    dirs: '',
+    files: '',
+  },
+  which: 0,
 }
 
 // getters
@@ -25,7 +29,7 @@ const getters = {
 const actions = {
   getPostsAction({ commit }) {
     axios.post("http://localhost:3000/api", sendForm("FIRST")).then(response => {
-      commit('SET_POSTS', response.data.dirs)
+      commit('SET_POSTS', response.data)
       console.log(response.data)
     })
   }
@@ -34,7 +38,8 @@ const actions = {
 // mutations
 const mutations = {
   SET_POSTS(state, posts) {
-    state.posts = posts
+    state.posts.dirs = posts.dirs
+    state.posts.files = posts.files
   }
 }
 

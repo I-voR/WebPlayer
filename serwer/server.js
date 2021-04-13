@@ -15,20 +15,19 @@ function readMusic(action, c = 0) {
     }
 
     let dirs = fs.readdirSync(PATH + '/static/mp3/')
-    let files
+    let files, arr
 
-    dirs.forEach((dir) => { obj.dirs.push(dir) })
-        
-    if (action === 'FIRST') {
-        files = fs.readdirSync(PATH + '/static/mp3/' + dirs[0])
-    } else {
-        files = fs.readdirSync(PATH + '/static/mp3/' + dirs[c])
-    }
-    
-    files.forEach((file) => {
-        if (file.indexOf('.jpg') === -1) {
-            obj.files.push({ 'file': file })
-        }
+    dirs.forEach((dir) => {
+        if (dir !== 'temp') { obj.dirs.push(dir) }
+        arr = []
+
+        files = fs.readdirSync(PATH + '/static/mp3/' + dir)
+
+        files.forEach((file) => {
+            if (file.indexOf('.jpg') === -1) { arr.push(file) }
+        })
+
+        obj.files.push(arr)
     })
         
     return obj

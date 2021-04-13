@@ -2,10 +2,10 @@
   <div id="main">
     <h1>Tytuł piosenki: {{ msg }}</h1>
 
-    <div class="track" v-for="(track, i) in listTracks" v-bind:key="i">
-      <a @click="getfile(track.dirs, i)">{{ i + 1 }}: {{ track.dirs }} </a>
+    <div class="track" v-for="(dir, i) in listTracks.dirs" v-bind:key="i">
+      <a @click="getfile(dir, i)">{{ dir }} </a>
 
-      <button @click="print(track)"></button>
+      <button @click="print(listTracks.files[i])"></button>
     </div>
 
     <div id="button-container">
