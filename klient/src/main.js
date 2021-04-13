@@ -8,25 +8,6 @@ Vue.config.productionTip = false
 
 Vue.use(Vuex);
 
-const store = new Vuex.Store({
-  state,
-  getters,
-  actions,
-  mutations
-})
-
-new Vue({
-  store: store,
-  render: (h) => h(App)
-}).$mount('#app')
-
-function sendForm(action) {
-  //FIRST NEXT
-  let formData = new FormData();
-  formData.append("action", action);
-  return formData;
-}
-
 
 // state
 const state = {
@@ -55,6 +36,28 @@ const mutations = {
     state.posts = posts
   }
 }
+
+
+
+const store = new Vuex.Store({
+  state,
+  getters,
+  actions,
+  mutations
+})
+
+new Vue({
+  store: store,
+  render: (h) => h(App)
+}).$mount('#app')
+
+function sendForm(action) {
+  //FIRST NEXT
+  let formData = new FormData();
+  formData.append("action", action);
+  return formData;
+}
+
 
 
 
