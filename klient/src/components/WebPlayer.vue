@@ -22,7 +22,7 @@
     <br />
     <div id="button-container">
       <div id="prev">
-        <button @click="prevSong">
+        <button @click="songSwitch('prev')">
           <img class="controls" src="http://localhost:3000/prevSong.svg" />
         </button>
       </div>
@@ -38,7 +38,7 @@
       </div>
 
       <div id="next">
-        <button @click="nextSong">
+        <button @click="songSwitch('next')">
           <img
             class="controls"
             style="transform: rotate(180deg)"
@@ -96,8 +96,53 @@ export default {
     console.log("comp mounted", new Date().getMilliseconds());
   },
   methods: {
+    songSwitch: function (direction) {
+      let songBefore = this.title + ".mp3";
+      if (
+        songBefore != ".mp3" &&
+        this.songlist.songs != undefined &&
+        this.songlist.songs != []
+      ) {
+        let counter = this.songlist.songs.indexOf(songBefore);
+        var songName;
+        switch (direction) {
+          case "prev":
+            console.log("prev");
+            if (counter == 0) {
+              counter = this.songlist.songs.length - 1;
+            } else {
+              counter--;
+            }
+
+            songName = this.songlist.songs[counter];
+            this.title = songName.split(".")[0];
+            this.playing = false;
+            document.getElementById("audio").src =
+              "http://localhost:3000/" + this.songlist.album + "/" + songName;
+            document.getElementById("audio").load();
+            break;
+          case "next":
+            if (counter == this.songlist.songs.length - 1) {
+              counter = 0;
+            } else {
+              counter++;
+            }
+            //console.log(counter);
+            //console.log(this.songlist.songs);
+            //console.log(this.songlist.songs[counter]);
+
+            songName = this.songlist.songs[counter];
+            this.title = songName.split(".")[0];
+            this.playing = false;
+            document.getElementById("audio").src =
+              "http://localhost:3000/" + this.songlist.album + "/" + songName;
+            document.getElementById("audio").load();
+            break;
+        }
+      }
+    },
     setMusicUrl: function (songName) {
-      this.title = songName.slice(0, -4);
+      this.title = songName.split(".")[0];
       this.playing = false;
       console.log(
         "http://localhost:3000/" + this.songlist.album + "/" + songName
@@ -140,12 +185,6 @@ export default {
       console.log("paused");
 
       document.getElementById("audio").pause();
-    },
-    nextSong: function () {
-      console.log("nextSong");
-    },
-    prevSong: function () {
-      console.log("prevSong");
     },
     changeProgress: function () {
       document.getElementById("audio").pause();
