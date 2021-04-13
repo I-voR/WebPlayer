@@ -1,12 +1,13 @@
 /* eslint-disable require-jsdoc */
 const fs = require('fs')
 const http = require('http')
-// const qs = require('querystring')
+const Crypto = require('crypto')
+const formidable = require('formidable')
 
 const PORT = process.env.PORT || 3000
-const PATH = process.cwd()
-// const SERV_ADDR = 'http://localhost:' + PORT
+const PATH = process.cwd().replace(/\\/g, '/')
 
+// eslint-disable-next-line no-unused-vars
 function readMusic() {
     let obj = {
         'dirs': [],
@@ -31,22 +32,66 @@ function readMusic() {
     return obj
 }
 
+function fileUpload(fields, files) {
+    let oldPath, newPath
+    let dir = PATH + '/static/mp3/upload-'
+    dir += Crypto.randomBytes(16).toString('base64').slice(0, 16).replace(/\//g, '0').replace(/\\/g, '0') // Crypto-random string
+    dir += '/'
+    
+    if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir)
+    }
+
+    for (let i = 0; i < fields.length; i++) {
+        let name = 'file' + i
+        oldPath = files[name].path
+        newPath = dir + files[name].name
+
+        if (files[name].name.indexOf('jpg') !== -1) {
+            newPath = dir + 'cover.jpg'
+        }
+
+        fs.rename(oldPath, newPath, function(err) {
+            if (err) return
+        })
+    }
+}
+
+function formHandler(req, res) {
+    let form = formidable.IncomingForm()
+    
+    if (!fs.existsSync(PATH + '/static/mp3/temp/')){
+        fs.mkdirSync(PATH + '/static/mp3/temp/')
+    }
+
+    form.uploadDir = PATH + '/static/mp3/temp/'
+
+    form.parse(req, function(err, fields, files) {
+        if (err) {
+            return
+        }
+
+        if (fields.action === 'UPLOAD') fileUpload(fields, files)
+        else {
+            let list = readMusic()
+            res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+            res.end(JSON.stringify(list, null, 2))
+        }
+    })
+}
+
 function redirect(req, res) {
-    let list
+    res.setHeader('Access-Control-Allow-Origin', '*')
 
     switch (req.method) {
     case 'GET':
-        res.setHeader('Access-Control-Allow-Origin', '*')
-        
         switch (req.url.substr(req.url.lastIndexOf('.') + 1)) {
         case 'mp3':
-        // case 'jpg':
             fs.readFile(PATH + '/static/mp3/' + decodeURI(req.url), function(err, data) {
                 if (err) { return }
                 let stats = fs.statSync(PATH + '/static/mp3/' + decodeURI(req.url))
                 res.writeHead(200, {
                     'Content-type': 'audio/mpeg',
-                    /* 'Content-type': `${req.url.substr(req.url.lastIndexOf('.') + 1) === 'mp3' ? 'audio/mpeg' : 'image/jpeg'}`,*/
                     'Content-Length': stats.size,
                     'Accept-Ranges': 'bytes' 
                 })
@@ -56,7 +101,7 @@ function redirect(req, res) {
             break
         
         case 'svg':
-            fs.readFile(PATH + '/static/svg/' + decodeURI(req.url), function(err, data) {
+            fs.readFile(PATH + '/static/img/' + decodeURI(req.url), function(err, data) {
                 if (err) { return }
                 res.writeHead(200, { 'Content-type': 'image/svg+xml' })
                 res.write(data)
@@ -64,30 +109,82 @@ function redirect(req, res) {
             })
             break
         
+        case 'jpg':
+            fs.readFile(PATH + '/static/mp3/' + decodeURI(req.url).replace('.jpg', '') + '/cover.jpg', function(err, data) {
+                if (err) {
+                    fs.readFile(PATH + '/static/img/default.jpg', function(err, defaultData) {
+                        if (err) { return }
+                        
+                        res.writeHead(200, { 'Content-type': 'image/jpeg' })
+                        res.write(defaultData)
+                        res.end()
+                    })
+                } else {
+                    res.writeHead(200, { 'Content-type': 'image/jpeg' })
+                    res.write(data)
+                    res.end()
+                }
+            })
+            break
+
+        case 'png':
+            fs.readFile(PATH + '/static/img/' + decodeURI(req.url), function(err, data) {
+                if (err) { return }
+                res.writeHead(200, { 'Content-type': 'image/png' })
+                res.write(data)
+                res.end()
+            })
+            break
+
+        case 'js':
+            fs.readFile(PATH + '/static/js/' + decodeURI(req.url), function(err, data) {
+                if (err) { return }
+                res.writeHead(200, { 'Content-type': 'text/javascript; charset=utf-8' })
+                res.write(data)
+                res.end()
+            })
+            break
+
+        case 'css':
+            fs.readFile(PATH + '/static/css/' + decodeURI(req.url), function(err, data) {
+                if (err) { return }
+                res.writeHead(200, { 'Content-type': 'text/css; charset=utf-8' })
+                res.write(data)
+                res.end()
+            })
+            break
+
+        case 'ico':
+            fs.readFile(PATH + '/favicon.ico', function(err, data) {
+                if (err) { return }
+                res.writeHead(200, { 'Content-type': 'image/vnd.microsoft.icon' })
+                res.write(data)
+                res.end()
+            })
+            break
+
         default:
+            if (req.url === '/admin' || req.url === '/admin.html') {
+                fs.readFile(PATH + '/admin.html', function(err, data) {
+                    if (err) { return }
+                    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
+                    res.write(data, 'utf-8')
+                    res.end()
+                })
+            }
             break
         }
-
-        // else {
-        // res.end(JSON.stringify(obj, null, 2))
-        // }
 
         break
 
     case 'POST':
-        console.log(res.json)
-        list = readMusic()
-        console.log(list)
-
-        res.setHeader('Access-Control-Allow-Origin', '*')
-        res.setHeader('Content-Type', 'application/json; charset=utf-8')
-        res.write(JSON.stringify(list, null, 2), 'utf-8')
-
+        formHandler(req)
+        res.writeHead(200)
         res.end()
+
         break
 
     case 'OPTIONS':
-        res.setHeader('Access-Control-Allow-Origin', '*')
         res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
         res.setHeader('Content-Type', 'text/plain; charset=utf-8')
         res.end()
@@ -97,10 +194,10 @@ function redirect(req, res) {
 }
 
 const server = http.createServer(function(req, res) {
-    // res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' } )
     redirect(req, res)
 })
 
 server.listen(PORT, function() {
+    // eslint-disable-next-line no-console
     console.log('Server started on port:', PORT)
 })
