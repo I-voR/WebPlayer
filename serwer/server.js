@@ -184,8 +184,6 @@ function redirect(req, res) {
 
     case 'POST':
         formHandler(req, res)
-        res.writeHead(200)
-        res.end()
 
         break
 
