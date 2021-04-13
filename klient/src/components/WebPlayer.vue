@@ -2,6 +2,12 @@
   <div id="main">
     <h1>Tytuł piosenki: {{ msg }}</h1>
 
+    <div class="track" v-for="(track, i) in listTracks" v-bind:key="i">
+      <a @click="getfile(track.dirs, i)">{{ i + 1 }}: {{ track.dirs }} </a>
+
+      <button @click="print(track)"></button>
+    </div>
+
     <div id="button-container">
       <div id="prev">
         <button @click="prevSong">
@@ -70,9 +76,14 @@ export default {
   mounted() {
     //akcja
     this.$store.dispatch("getPostsAction");
-    console.log("comp mounted", new Date().getMilliseconds())
+    console.log("comp mounted", new Date().getMilliseconds());
+    console.log(this.$store.getters.getAllPosts.dirs);
+    console.log(this.$store.getters.getAllPosts.files);
   },
   methods: {
+    print: function (printing) {
+      console.log(printing);
+    },
     play: async function () {
       this.playing = true;
       this.playingDuringCLick = true;
@@ -124,6 +135,11 @@ export default {
       document.getElementById("audio").volume = document.getElementById(
         "inputVolume"
       ).value;
+    },
+  },
+  computed: {
+    listTracks() {
+      return this.$store.getters.getAllPosts;
     },
   },
 };
