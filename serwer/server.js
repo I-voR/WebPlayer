@@ -71,10 +71,15 @@ function formHandler(req, res) {
             return
         }
 
-        if (fields.action === 'UPLOAD') fileUpload(fields, files)
+        if (fields.action === 'UPLOAD') {
+            fileUpload(fields, files)
+            res.writeHead(200)
+            res.end()
+        }
         else {
             let list = readMusic()
             res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+            res.writeHead(200)
             res.end(JSON.stringify(list, null, 2))
         }
     })
@@ -182,7 +187,8 @@ function redirect(req, res) {
             res.writeHead(200)
             res.end()
 
-            break
+    case 'POST':
+        formHandler(req, res)
 
         case 'OPTIONS':
             res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
