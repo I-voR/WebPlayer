@@ -8,27 +8,29 @@ const PORT = process.env.PORT || 3000
 const PATH = process.cwd().replace(/\\/g, '/')
 
 // eslint-disable-next-line no-unused-vars
-function readMusic() {
+function readMusic(action, c = 0) {
     let obj = {
         'dirs': [],
         'files': []
     }
 
     let dirs = fs.readdirSync(PATH + '/static/mp3/')
+    let files
 
-    dirs.forEach((dir) => {
-        obj.dirs.push(dir)
-        let files = fs.readdirSync(PATH + '/static/mp3/' + dir)
-        let album = []
-
-        files.forEach((file) => {
-            if (file.indexOf('.jpg') !== -1) {
-                album.push({ 'file': file })
-            }
-        })
-        obj.files.push(album)
+    dirs.forEach((dir) => { obj.dirs.push(dir) })
+        
+    if (action === 'FIRST') {
+        files = fs.readdirSync(PATH + '/static/mp3/' + dirs[0])
+    } else {
+        files = fs.readdirSync(PATH + '/static/mp3/' + dirs[c])
+    }
+    
+    files.forEach((file) => {
+        if (file.indexOf('.jpg') === -1) {
+            obj.files.push({ 'file': file })
+        }
     })
-
+        
     return obj
 }
 
@@ -67,9 +69,7 @@ function formHandler(req, res) {
     form.uploadDir = PATH + '/static/mp3/temp/'
 
     form.parse(req, function(err, fields, files) {
-        if (err) {
-            return
-        }
+        if (err) { return }
 
         if (fields.action === 'UPLOAD') {
             fileUpload(fields, files)
@@ -77,7 +77,7 @@ function formHandler(req, res) {
             res.end()
         }
         else {
-            let list = readMusic()
+            let list = readMusic(fields.action)
             res.setHeader('Content-Type', 'text/plain; charset=utf-8')
             res.writeHead(200)
             res.end(JSON.stringify(list, null, 2))
