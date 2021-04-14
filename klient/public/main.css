@@ -101,6 +101,7 @@ h1 {
 
 #songs,
 #albums {
+    overflow: auto;
     box-sizing: border-box;
     height: 254px;
 }

@@ -7,7 +7,7 @@ const formidable = require('formidable')
 const PORT = process.env.PORT || 3000
 const PATH = process.cwd().replace(/\\/g, '/')
 
-function readMusic(action, c = 0) {
+function readMusic() {
     let obj = {
         'dirs': [],
         'files': []
@@ -79,7 +79,7 @@ function formHandler(req, res) {
             res.end()
         }
         else {
-            let list = readMusic(fields.action)
+            let list = readMusic()
             res.setHeader('Content-Type', 'text/plain; charset=utf-8')
             res.writeHead(200)
             res.end(JSON.stringify(list, null, 2))
