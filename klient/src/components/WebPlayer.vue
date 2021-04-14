@@ -13,7 +13,7 @@
     </div>
     <div id="songs">
       <div class="song" v-for="(dir, i) in songs()" v-bind:key="i">
-        <button class="songButton" @click="setMusicUrl(songs(i))">
+        <button class="songButton" @click="setMusicUrl(songs(i).substring(0, songs(i).indexOf('.mp3') + 4))">
           {{ songs(i) }}
         </button>
       </div>
@@ -100,6 +100,23 @@ export default {
     console.log("comp mounted", new Date().getMilliseconds());
   },
   methods: {
+    timer(input) {
+        let time = parseInt(input);
+        let minutes = Math.trunc(time / 60);
+        let seconds = time % 60;
+        seconds = seconds.toString();
+        minutes = minutes.toString();
+        if (minutes == undefined) {
+          minutes = 0;
+        }
+        if (minutes.length == 1) {
+          minutes = "0" + minutes;
+        }
+        if (seconds.length == 1) {
+          seconds = "0" + seconds;
+        }
+        return minutes + ":" + seconds;
+      },
     songSwitch: function (direction) {
       let songBefore = this.title + ".mp3";
       if (
@@ -119,7 +136,7 @@ export default {
               counter--;
             }
 
-            songName = this.songlist.songs[counter];
+            songName = this.songlist.songs[counter].file;
             this.title = songName.split(".")[0];
             this.playing = false;
             document.getElementById("audio").src =
@@ -136,7 +153,7 @@ export default {
             //console.log(this.songlist.songs);
             //console.log(this.songlist.songs[counter]);
 
-            songName = this.songlist.songs[counter];
+            songName = this.songlist.songs[counter].file;
             this.title = songName.split(".")[0];
             this.playing = false;
             document.getElementById("audio").src =
@@ -157,12 +174,13 @@ export default {
         .addEventListener(
           "timeupdate",
           () =>
-            (this.time = timer(
+            // eslint-disable-next-line no-undef
+            (this.time = this.timer(
               document.getElementById("audio").currentTime.toFixed()
             ))
         );
     },
-    setMusicUrl: function (songName) {
+    setMusicUrl: function(songName) {
       this.time = "00:00";
       this.title = songName.split(".")[0];
       this.playing = false;
@@ -195,24 +213,6 @@ export default {
       }
     },
     play: async function () {
-      function timer(input) {
-        let time = parseInt(input);
-        let minutes = Math.trunc(time / 60);
-        let seconds = time % 60;
-        seconds = seconds.toString();
-        minutes = minutes.toString();
-        if (minutes == undefined) {
-          minutes = 0;
-        }
-        if (minutes.length == 1) {
-          minutes = "0" + minutes;
-        }
-        if (seconds.length == 1) {
-          seconds = "0" + seconds;
-        }
-        return minutes + ":" + seconds;
-      }
-
       this.playing = true;
       this.playingDuringCLick = true;
       console.log("playing");
@@ -224,7 +224,7 @@ export default {
         .addEventListener(
           "timeupdate",
           () =>
-            (this.time = timer(
+            (this.time = this.timer(
               document.getElementById("audio").currentTime.toFixed()
             ))
         );
