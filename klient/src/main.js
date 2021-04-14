@@ -15,7 +15,6 @@ const state = {
     dirs: '',
     files: '',
   },
-  which: 0,
 }
 
 // getters

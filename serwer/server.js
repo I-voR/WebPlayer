@@ -7,7 +7,6 @@ const formidable = require('formidable')
 const PORT = process.env.PORT || 3000
 const PATH = process.cwd().replace(/\\/g, '/')
 
-// eslint-disable-next-line no-unused-vars
 function readMusic(action, c = 0) {
     let obj = {
         'dirs': [],
@@ -15,7 +14,7 @@ function readMusic(action, c = 0) {
     }
 
     let dirs = fs.readdirSync(PATH + '/static/mp3/')
-    let files, arr
+    let files, arr, stats
 
     dirs.forEach((dir) => {
         if (dir !== 'temp') { obj.dirs.push(dir) }
@@ -24,7 +23,11 @@ function readMusic(action, c = 0) {
         files = fs.readdirSync(PATH + '/static/mp3/' + dir)
 
         files.forEach((file) => {
-            if (file.indexOf('.jpg') === -1) { arr.push(file) }
+            // if (file.indexOf('.jpg') === -1) { arr.push(file) }
+            if (file.indexOf('.jpg') === -1) {
+                stats = fs.statSync(PATH + '/static/mp3/' + dir + '/' + file)
+                arr.push({ 'file': file, 'size': stats.size })
+            }
         })
 
         obj.files.push(arr)

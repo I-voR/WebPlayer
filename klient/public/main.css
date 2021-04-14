@@ -1,4 +1,10 @@
-body{
+html,
+body {
+    padding: 0;
+    margin: 0;
+}
+
+body {
     background-color: darkslateblue;
 }
 
@@ -80,21 +86,41 @@ h1 {
     background: #a344a0;
     cursor: pointer;
 }
-#albums{
-    border: 1px red solid;
-    height: 250px;
-    width: 100%;
-}
-#songs{
-    border: 1px red solid;
-    height: 250px;
-    width: 100%;
-}
-.song{
-    border: 1px red solid;
 
+#albums {
+    border: 1px red solid;
+    height: 250px;
+    width: 100%;
 }
-.songButton{
+
+#songs {
+    border: 1px red solid;
+    height: 250px;
+    width: 100%;
+}
+
+#songs,
+#albums {
+    box-sizing: border-box;
+    height: 254px;
+}
+
+/* .song {
+    border: 1px red solid;
+} */
+
+.songButton {
     border: 1px red solid;
     width: 20%;  
+}
+
+.albumButton {
+    padding: 0;
+    width: 252px;
+    height: 252px;
+}
+
+.cover {
+    width: 244px;
+    height: 244px;
 }

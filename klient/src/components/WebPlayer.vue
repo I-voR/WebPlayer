@@ -3,7 +3,7 @@
     <h1>Tytuł piosenki: {{ title }}</h1>
     <div id="albums">
       <div class="album" v-for="(dir, i) in listTracks.dirs" v-bind:key="i">
-        <button @click="print(listTracks.files[i], listTracks.dirs[i])">
+        <button class="albumButton" @click="print(listTracks.files[i], listTracks.dirs[i])">
           <img
             class="cover"
             v-bind:src="'http://localhost:3000/' + listTracks.dirs[i] + '.jpg'"
@@ -191,7 +191,7 @@ export default {
       if (num == null || num == undefined) {
         return this.songlist.songs;
       } else {
-        return this.songlist.songs[num];
+        return this.songlist.songs[num].file + ` [${Math.round(this.songlist.songs[num].size * 100 / 1048576) / 100}MB]`;
       }
     },
     play: async function () {
@@ -201,7 +201,6 @@ export default {
         let seconds = time % 60;
         seconds = seconds.toString();
         minutes = minutes.toString();
-        console.log(seconds.length + " " + seconds);
         if (minutes == undefined) {
           minutes = 0;
         }
@@ -243,11 +242,6 @@ export default {
         "inputProgress"
       ).value;
       document.getElementById("audio").play();
-    },
-    changeProgress: function () {
-      document.getElementById("audio").currentTime = document.getElementById(
-        "inputProgress"
-      ).value;
     },
     pauseProgress: function () {
       if (!this.playingDuringCLick) {
