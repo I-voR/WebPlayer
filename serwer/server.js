@@ -119,7 +119,6 @@ function redirect(req, res) {
         case 'jpg':
             fs.readFile(PATH + '/static/mp3/' + decodeURI(req.url).replace('.jpg', '') + '/cover.jpg', function(err, data) {
                 if (err) {
-                    console.log(req.url)
                     fs.readFile(PATH + '/static/img/default.jpg', function(err, defaultData) {
                         if (err) { return }
 
