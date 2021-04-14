@@ -17,29 +17,30 @@ function readMusic() {
     let files, arr, stats
 
     dirs.forEach((dir) => {
-        if (dir !== 'temp') { obj.dirs.push(dir) }
-        arr = []
+        if (dir !== 'temp') {
+            obj.dirs.push(dir)
+            arr = []
 
-        files = fs.readdirSync(PATH + '/static/mp3/' + dir)
-
-        files.forEach((file) => {
-            // if (file.indexOf('.jpg') === -1) { arr.push(file) }
-            if (file.indexOf('.jpg') === -1) {
-                stats = fs.statSync(PATH + '/static/mp3/' + dir + '/' + file)
-                arr.push({ 'file': file, 'size': stats.size })
-            }
-        })
-
-        obj.files.push(arr)
+            files = fs.readdirSync(PATH + '/static/mp3/' + dir)
+    
+            files.forEach((file) => {
+                if (file.indexOf('.jpg') === -1) {
+                    stats = fs.statSync(PATH + '/static/mp3/' + dir + '/' + file)
+                    arr.push({ 'file': file, 'size': stats.size })
+                }
+            })
+    
+            obj.files.push(arr)
+        }
     })
-        
+
     return obj
 }
 
 function fileUpload(fields, files) {
     let oldPath, newPath
     let dir = PATH + '/static/mp3/upload-'
-    dir += Crypto.randomBytes(16).toString('base64').slice(0, 16).replace(/\//g, '0').replace(/\\/g, '0') // Crypto-random string
+    dir += Crypto.randomBytes(16).toString('base64').slice(0, 16).replace(/\//g, '0').replace(/\\/g, '0')
     dir += '/'
 
     if (!fs.existsSync(dir)) {
